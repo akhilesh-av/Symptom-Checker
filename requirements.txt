@@ -1,0 +1,5 @@
+ppiDjango==5.0.3
+Django==5.0.4
+djangorestframework==3.15.1
+transformers==4.38.2
+transformers==4.39.3

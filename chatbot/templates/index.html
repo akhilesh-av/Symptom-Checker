@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot UI</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 0;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 50px auto;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .chat-box {
+      height: 300px;
+      overflow-y: auto;
+      border-bottom: 1px solid #ccc;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column-reverse; /* To keep the input box below */
+    }
+    input[type="text"] {
+      width: calc(100% - 70px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .message {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+    .user-message {
+      background-color: #d4e6fc;
+      align-self: flex-start;
+    }
+    .bot-message {
+      background-color: #f0f0f0;
+      align-self: flex-end;
+    }
+  </style>
+</head>
+<body>
+<form action="" method="post" onsubmit="saveUserInput()">
+    {% csrf_token %}
+  <div class="chat-container">
+    <div class="chat-box" id="chat-box">
+      <!-- Server responses and User inputs inserted here -->
+      {% if content %}
+      <div class="message bot-message">
+        Bot: {{content}}
+      </div>
+      {% endif %}
+    </div>
+    <input type="text" id="user-input" name="input_text" placeholder="Type your message...">
+    <button type="submit">Send</button>
+  </div>
+</form>
+<script>
+  // Function to save user input to localStorage before form submission
+  function saveUserInput() {
+    const userInput = document.getElementById('user-input').value;
+    localStorage.setItem('lastUserInput', userInput);
+  }
+
+  // Function to display the last user input from localStorage
+  function displayLastUserInput() {
+    const lastUserInput = localStorage.getItem('lastUserInput');
+    if (lastUserInput) {
+      const chatBox = document.getElementById('chat-box');
+      const userMessageDiv = document.createElement('div');
+      userMessageDiv.className = 'message user-message';
+      userMessageDiv.textContent = "User: " + lastUserInput;
+      chatBox.appendChild(userMessageDiv);
+      // Optionally, clear the stored message after displaying it
+      localStorage.removeItem('lastUserInput');
+    }
+  }
+
+  // Call display function on page load
+  window.onload = function() {
+    displayLastUserInput();
+  };
+</script>
+</body>
+</html>
